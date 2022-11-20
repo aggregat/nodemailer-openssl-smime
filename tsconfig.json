@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./lib",
+    "strict": true,
+    "target": "es6",
+    "types": ["node", "jest"],
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["test", "**/*spec.ts"]
+}

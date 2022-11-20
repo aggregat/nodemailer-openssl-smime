@@ -1,0 +1,15 @@
+{
+  <ignore 64kb for napi_module_register>
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:_Znwm
+  fun:napi_module_register
+  obj:/lib/ld-musl-x86_64.so.1
+  obj:*
+  obj:/usr/src/app/prebuilds/linux-x64/node.napi.node
+  obj:*
+  obj:*
+  obj:*
+  obj:*
+  obj:*
+}

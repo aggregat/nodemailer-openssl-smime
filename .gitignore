@@ -1,0 +1,5 @@
+dist/
+build/
+prebuilds/
+node_modules/
+.vscode/
