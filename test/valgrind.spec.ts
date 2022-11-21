@@ -18,10 +18,14 @@ describe("Valgrind", () => {
       "--suppressions=valgrind.supp",
       "--log-file=valgrind.log",
       "--error-exitcode=1",
-      "npm",
-      "test",
-      "test/decrypt.spec.ts"
+      "node",
+      "./index.js",
     ]);
+
+    const { output } = await startedContainer.exec(["cat", "valgrind.log"]);
+
+    console.log(output);
+
     expect(exitCode).toBe(0);
     await startedContainer.stop();
   }, 240_000);
