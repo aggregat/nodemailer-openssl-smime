@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
-  openssl-napi:
+  openssl-napi-test:
     build:
       context: .
+      dockerfile: Dockerfile.test

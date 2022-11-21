@@ -15,16 +15,15 @@ COPY . .
 RUN npm ci
 RUN npm run build
 RUN npm pack
-RUN npm test
 
 ###################################################################################################
 FROM node:${RUN_NODE_VERSION}-alpine AS runstage
 
-WORKDIR /usr/src/app
-COPY user .
+WORKDIR /usr/src/app/
+COPY fixtures/integrating-app .
 
 COPY --chown=node:node --from=buildstage /usr/src/app/openssl-napi-*.tgz .
 
 RUN npm i openssl-napi-*.tgz
 
-CMD ["npm", "start"]
+CMD ["sleep", "infinity"]
