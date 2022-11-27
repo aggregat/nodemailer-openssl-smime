@@ -1,73 +1,96 @@
+import { readFile } from "fs/promises";
+import { join, resolve } from "path";
+import { GenericContainer } from "testcontainers";
+
 import { encrypt } from "..";
+
+const ROOT_DIR = resolve(__dirname, "..");
+const FIXTURE_DIR = resolve(ROOT_DIR, "fixtures", "data");
 
 describe("encrypt", () => {
   it("should be defined", () => {
     expect(encrypt).toBeDefined();
   });
 
-  it("should encrypt strings", () => {
-    const MESSAGE = "Hello world";
-    const PUBLIC_KEY = `-----BEGIN CERTIFICATE-----
-MIIELDCCApSgAwIBAgIIcsOElVeHzfQwDQYJKoZIhvcNAQELBQAwVzELMAkGA1UE
-BhMCVUsxEjAQBgNVBAcMCVRlc3QgQ2l0eTEWMBQGA1UECgwNT3BlblNTTCBHcm91
-cDEcMBoGA1UEAwwTVGVzdCBTL01JTUUgUm9vdCBDQTAgFw0xODA2MTQxMjQ2Mjha
-GA8yMTE4MDYxNDEyNDYyOFowVjELMAkGA1UEBhMCVUsxJTAjBgNVBAMMHE9wZW5T
-U0wgdGVzdCBTL01JTUUgc2lnbmVyIDExIDAeBgkqhkiG9w0BCQEWEXRlc3QxQG9w
-ZW5zc2wub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1vvSgaL1
-byi9AE8Ep3v7Yv36JxYywaZhUy8dEFRiYn6NsVhhNo6SK1Mp8daQ0MZoMzbT1aKp
-JTLTgDJZHit2t1d6l3aWJG+cbcLua+XKowaZjj6rirB390fuL4qt5PiAb571QFtu
-L8apcydwGEdkaPRuCnvctN8VcZPTKh+M8VEESyxk5K37QYKaAB6ItWR5KhjiAuDt
-zsJbjEtOvGtmu2FRCU47GzfkdjYo7tY38WTY+2WWh+idKErtmYSinmhE0H7+yoJB
-s1VCI+cq5tVW+oEO9HF4vEDEUykEFFPsCEkIWM+RjCgK8cRSCpg6VQr+ZTii6k7C
-m9CP81QhUoV3QwIDAQABo3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1P
-cGVuU1NMIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUg1DE7OaNqMQQ
-8Z1bvjhnlisxfsMwHwYDVR0jBBgwFoAUpJjGgWED0xBnKntZmlNiAzjC0HswDQYJ
-KoZIhvcNAQELBQADggGBAGxAivCwPsAYmMZfVJTELWNNMBzKzmeRvrp6k/6S74Pw
-LDEhTnslCV4U1gTSd3nQ+LRm1fkzxLA12A/rlqN51P8B+hyVSMN9dj54YUcFd+KO
-XhkSDrSpph6hRqGy8zqELzlb1Q8yoIBclEmyv+CkXMrpnm+4JL4kzyj/iBRkZTDz
-ns15jJD9KHgrOnclaoDRkOT6lGbsd3j+aviKEj8ZILufSMw+W2YORy3nSAencjbO
-ezivVujqm+pjkfqdCS1HcFB7LhQEILfFqkssw8YmtJVrM9LF8VIcqueXbVZmeS/1
-QV5B7OEmtsM+NkoLF5ldWdPQvmftbShh+AAlpcsmqiRefQgA3aQn6YOnOHnnQwgB
-oQRNjQXsjgxV4t2HFYpwkK41kx4HToVGciPNMkndzfY/GJmgXsXfB6/AfUfhLTDv
-tbws1MZhaCNOffw3/SVS2nLREMFCGn5uAgNkqssWqeWJu3910XF640tqPBj5YGFc
-fykwWNhG5xS04EHpztgKdQ==
------END CERTIFICATE-----`;
-
-    const result = encrypt(MESSAGE, PUBLIC_KEY);
-    expect(result).toBeTruthy();
-  });
-
-  it("should encrypt buffers", () => {
-    const MESSAGE = Buffer.from("Hello world");
-    const PUBLIC_KEY = Buffer.from(
-      `-----BEGIN CERTIFICATE-----
-MIIELDCCApSgAwIBAgIIcsOElVeHzfQwDQYJKoZIhvcNAQELBQAwVzELMAkGA1UE
-BhMCVUsxEjAQBgNVBAcMCVRlc3QgQ2l0eTEWMBQGA1UECgwNT3BlblNTTCBHcm91
-cDEcMBoGA1UEAwwTVGVzdCBTL01JTUUgUm9vdCBDQTAgFw0xODA2MTQxMjQ2Mjha
-GA8yMTE4MDYxNDEyNDYyOFowVjELMAkGA1UEBhMCVUsxJTAjBgNVBAMMHE9wZW5T
-U0wgdGVzdCBTL01JTUUgc2lnbmVyIDExIDAeBgkqhkiG9w0BCQEWEXRlc3QxQG9w
-ZW5zc2wub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1vvSgaL1
-byi9AE8Ep3v7Yv36JxYywaZhUy8dEFRiYn6NsVhhNo6SK1Mp8daQ0MZoMzbT1aKp
-JTLTgDJZHit2t1d6l3aWJG+cbcLua+XKowaZjj6rirB390fuL4qt5PiAb571QFtu
-L8apcydwGEdkaPRuCnvctN8VcZPTKh+M8VEESyxk5K37QYKaAB6ItWR5KhjiAuDt
-zsJbjEtOvGtmu2FRCU47GzfkdjYo7tY38WTY+2WWh+idKErtmYSinmhE0H7+yoJB
-s1VCI+cq5tVW+oEO9HF4vEDEUykEFFPsCEkIWM+RjCgK8cRSCpg6VQr+ZTii6k7C
-m9CP81QhUoV3QwIDAQABo3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1P
-cGVuU1NMIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUg1DE7OaNqMQQ
-8Z1bvjhnlisxfsMwHwYDVR0jBBgwFoAUpJjGgWED0xBnKntZmlNiAzjC0HswDQYJ
-KoZIhvcNAQELBQADggGBAGxAivCwPsAYmMZfVJTELWNNMBzKzmeRvrp6k/6S74Pw
-LDEhTnslCV4U1gTSd3nQ+LRm1fkzxLA12A/rlqN51P8B+hyVSMN9dj54YUcFd+KO
-XhkSDrSpph6hRqGy8zqELzlb1Q8yoIBclEmyv+CkXMrpnm+4JL4kzyj/iBRkZTDz
-ns15jJD9KHgrOnclaoDRkOT6lGbsd3j+aviKEj8ZILufSMw+W2YORy3nSAencjbO
-ezivVujqm+pjkfqdCS1HcFB7LhQEILfFqkssw8YmtJVrM9LF8VIcqueXbVZmeS/1
-QV5B7OEmtsM+NkoLF5ldWdPQvmftbShh+AAlpcsmqiRefQgA3aQn6YOnOHnnQwgB
-oQRNjQXsjgxV4t2HFYpwkK41kx4HToVGciPNMkndzfY/GJmgXsXfB6/AfUfhLTDv
-tbws1MZhaCNOffw3/SVS2nLREMFCGn5uAgNkqssWqeWJu3910XF640tqPBj5YGFc
-fykwWNhG5xS04EHpztgKdQ==
------END CERTIFICATE-----`
+  it("should encrypt a buffer message that can be decrypted with vanilla openssl smime", async () => {
+    const MESSAGE = await readFile(join(FIXTURE_DIR, "message.fixture.txt"));
+    const RECIPIENT = await readFile(
+      join(FIXTURE_DIR, "recipient.fixture.pem")
     );
 
-    const result = encrypt(MESSAGE, PUBLIC_KEY);
-    expect(Buffer.isBuffer(result)).toBe(true);
+    const result = encrypt(MESSAGE, RECIPIENT);
+    expect(result).toBeInstanceOf(Buffer);
+    expect(result.length).toBeGreaterThan(0);
+
+    const image = await GenericContainer.fromDockerfile(
+      ROOT_DIR,
+      "Dockerfile.openssl-test"
+    ).build();
+
+    const openssl = await image
+      .withCopyContentToContainer([
+        { content: RECIPIENT, target: "/mnt/recipient.pem" },
+        { content: result, target: "/mnt/message.txt" },
+      ])
+      .start();
+
+    const { output, exitCode } = await openssl.exec([
+      "openssl",
+      "smime",
+      "-decrypt",
+      "-recip",
+      "/mnt/recipient.pem",
+      "-inkey",
+      "/mnt/recipient.pem",
+      "-in",
+      "/mnt/message.txt",
+    ]);
+    await openssl.stop();
+
+    expect(Buffer.from(output)).toEqual(MESSAGE);
+    expect(exitCode).toBe(0);
+  });
+
+  it("should encrypt a string message that can be decrypted with vanilla openssl smime", async () => {
+    const MESSAGE = await readFile(
+      join(FIXTURE_DIR, "message.fixture.txt"),
+      "utf8"
+    );
+    const RECIPIENT = await readFile(
+      join(FIXTURE_DIR, "recipient.fixture.pem"),
+      "utf8"
+    );
+
+    const result = encrypt(MESSAGE, RECIPIENT);
+    expect(typeof result).toEqual("string");
+    expect(result.length).toBeGreaterThan(0);
+
+    const image = await GenericContainer.fromDockerfile(
+      ROOT_DIR,
+      "Dockerfile.openssl-test"
+    ).build();
+
+    const openssl = await image
+      .withCopyContentToContainer([
+        { content: RECIPIENT, target: "/mnt/recipient.pem" },
+        { content: result, target: "/mnt/message.txt" },
+      ])
+      .start();
+
+    const { output, exitCode } = await openssl.exec([
+      "openssl",
+      "smime",
+      "-decrypt",
+      "-recip",
+      "/mnt/recipient.pem",
+      "-inkey",
+      "/mnt/recipient.pem",
+      "-in",
+      "/mnt/message.txt",
+    ]);
+    await openssl.stop();
+
+    expect(output).toEqual(MESSAGE);
+    expect(exitCode).toBe(0);
   });
 });

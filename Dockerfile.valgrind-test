@@ -25,6 +25,7 @@ RUN apk add --update-cache \
 
 WORKDIR /usr/src/app/
 COPY fixtures/integrating-app .
+COPY fixtures/data .
 COPY valgrind.supp .
 
 COPY --chown=node:node --from=buildstage /usr/src/app/openssl-napi-*.tgz .

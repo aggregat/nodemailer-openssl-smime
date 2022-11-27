@@ -21,6 +21,7 @@ FROM node:${RUN_NODE_VERSION}-alpine AS runstage
 
 WORKDIR /usr/src/app/
 COPY fixtures/integrating-app .
+COPY fixtures/data .
 
 COPY --chown=node:node --from=buildstage /usr/src/app/openssl-napi-*.tgz .
 

@@ -21,7 +21,8 @@
     "build:tsc": "tsc",
     "build:prebuildify": "prebuildify --napi --strip",
     "build": "npm run build:gyp && npm run build:tsc && npm run build:prebuildify",
-    "test": "DEBUG=testcontainers* jest"
+    "test": "jest",
+    "test:debug": "DEBUG=testcontainers* jest"
   },
   "dependencies": {
     "node-gyp-build": "^4.5.0"
@@ -51,6 +52,7 @@
     "moduleDirectories": [
       "node_modules",
       "test"
-    ]
+    ],
+    "testTimeout": 30000
   }
 }

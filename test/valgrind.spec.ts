@@ -22,9 +22,10 @@ describe("Valgrind", () => {
       "./index.js",
     ]);
 
+    /*
     const { output } = await startedContainer.exec(["cat", "valgrind.log"]);
-
     console.log(output);
+    */
 
     expect(exitCode).toBe(0);
     await startedContainer.stop();

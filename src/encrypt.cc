@@ -25,7 +25,7 @@ Napi::Buffer<unsigned char> encrypt(Napi::Env &env,
   std::unique_ptr<X509, X509Deleter> pPublicKey(
       PEM_read_bio_X509(pKey.get(), nullptr, nullptr, nullptr));
   if (!pPublicKey)
-    throw(Napi::Error::New(env, "Error parsing X509 certificate"));
+    throw(Napi::Error::New(env, "Error parsing public key"));
 
   std::unique_ptr<STACK_OF(X509), X509StackDeleter> pRecipients(
       sk_X509_new_null());
