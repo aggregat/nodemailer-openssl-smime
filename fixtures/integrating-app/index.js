@@ -1,4 +1,4 @@
-const { encrypt, decrypt } = require("openssl-napi");
+const { encrypt, decrypt } = require("nodemailer-openssl-smime");
 const assert = require("assert");
 const { readFileSync } = require("fs");
 const { join } = require("path");

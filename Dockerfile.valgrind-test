@@ -28,8 +28,8 @@ COPY fixtures/integrating-app .
 COPY fixtures/data .
 COPY valgrind.supp .
 
-COPY --chown=node:node --from=buildstage /usr/src/app/openssl-napi-*.tgz .
+COPY --chown=node:node --from=buildstage /usr/src/app/nodemailer-openssl-smime-*.tgz .
 
-RUN npm i openssl-napi-*.tgz
+RUN npm i nodemailer-openssl-smime-*.tgz
 
 CMD ["sleep", "infinity"]

@@ -1,16 +1,9 @@
 import { join, resolve } from "path";
+import { fromStringOrBuffer, toStringOrBuffer } from "./utils";
 
 const addon = require("node-gyp-build")(resolve(join(__dirname, "..")));
 
-export const DEFAULT_CIPHER = "aes-256-cbc";
-
-const fromStringOrBuffer = <TInput extends string | Buffer>(input: TInput) =>
-  Buffer.isBuffer(input) ? input : Buffer.from(input);
-
-const toStringOrBuffer = <TInput extends string | Buffer>(
-  input: TInput,
-  output: Buffer
-): string | Buffer => (Buffer.isBuffer(input) ? output : output.toString());
+export const DEFAULT_CIPHER = "des3";
 
 export const encrypt = <TInput extends string | Buffer>(
   message: TInput,
@@ -34,8 +27,3 @@ export const decrypt = <TInput extends string | Buffer>(
     message,
     addon.decrypt(fromStringOrBuffer(message), fromStringOrBuffer(keyPair))
   );
-
-export default {
-  encrypt,
-  decrypt,
-};

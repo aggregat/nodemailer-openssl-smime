@@ -1,7 +1,7 @@
 {
   'targets': [
     {
-      'target_name': 'openssl-napi-native',
+      'target_name': 'nodemailer-openssl-smime-native',
       'sources': [ 'src/addon.cc', 'src/decrypt.cc', 'src/encrypt.cc', 'src/init.cc' ],
       'include_dirs': ["<!@(node -p \"require('node-addon-api').include\")"],
       'dependencies': ["<!(node -p \"require('node-addon-api').gyp\")"],

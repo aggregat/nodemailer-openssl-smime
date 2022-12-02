@@ -23,8 +23,8 @@ FROM node:${RUN_NODE_VERSION}-alpine AS runstage
 WORKDIR /usr/src/app
 COPY user .
 
-COPY --chown=node:node --from=buildstage /usr/src/app/openssl-napi-*.tgz .
+COPY --chown=node:node --from=buildstage /usr/src/app/nodemailer-openssl-smime-*.tgz .
 
-RUN npm i openssl-napi-*.tgz
+RUN npm i nodemailer-openssl-smime-*.tgz
 
 CMD ["npm", "start"]
