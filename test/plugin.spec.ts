@@ -32,7 +32,7 @@ describe("plugin", () => {
 
     const transporter = createTransport({
       streamTransport: true,
-    }).use("stream", plugin({ recipient: RECIPIENT }));
+    }).use("stream", plugin({ recipient: RECIPIENT, cipher: "des3" }));
 
     const result = await transporter.sendMail({
       from: "sender@example.com",

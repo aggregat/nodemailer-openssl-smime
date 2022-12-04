@@ -4,4 +4,7 @@ services:
   nodemailer-openssl-smime-test:
     build:
       context: .
-      dockerfile: Dockerfile.test
+    volumes:
+      # - ./build:/usr/src/app/build:rw
+      # - ./dist:/usr/src/app/dist:rw
+      - ./prebuilds/:/mnt/prebuilds/:rw

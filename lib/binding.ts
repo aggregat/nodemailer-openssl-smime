@@ -3,7 +3,7 @@ import { fromStringOrBuffer, toStringOrBuffer } from "./utils";
 
 const addon = require("node-gyp-build")(resolve(join(__dirname, "..")));
 
-export const DEFAULT_CIPHER = "des3";
+export const DEFAULT_CIPHER = "aes-256-cbc";
 
 export const encrypt = <TInput extends string | Buffer>(
   message: TInput,

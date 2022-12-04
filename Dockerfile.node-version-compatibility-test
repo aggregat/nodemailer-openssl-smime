@@ -6,7 +6,7 @@ ARG RUN_NODE_VERSION=18
 FROM nikolaik/python-nodejs:python${BUILD_PYTHON_VERSION}-nodejs${BUILD_NODE_VERSION}-alpine AS buildstage
 
 RUN apk add --update-cache \
-    build-base \
+  build-base \
   && rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app/

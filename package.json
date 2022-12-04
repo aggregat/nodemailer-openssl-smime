@@ -10,13 +10,12 @@
   "gypfile": true,
   "main": "dist/index.js",
   "files": [
-    "build/",
     "dist/",
     "prebuilds/"
   ],
   "scripts": {
     "install": "node-gyp-build",
-    "prebuild": "rimraf build dist prebuilds",
+    "prebuild": "rimraf dist build prebuilds",
     "build:gyp": "node-gyp-build",
     "build:tsc": "tsc",
     "build:prebuildify": "prebuildify --napi --strip",
