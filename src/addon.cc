@@ -9,12 +9,13 @@ Napi::Buffer<unsigned char> decrypt(Napi::Env &env,
 Napi::Buffer<unsigned char> encrypt(Napi::Env &env,
                                     const Napi::Buffer<unsigned char> &message,
                                     const Napi::Buffer<unsigned char> &key,
-                                    const Napi::String &cipher);
+                                    const Napi::String &cipher,
+                                    const std::optional<Napi::Object> &headers);
 
 Napi::Buffer<unsigned char> Encrypt(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
 
-  if (info.Length() != 3)
+  if (info.Length() < 3)
     throw(Napi::Error::New(env, "Wrong number of arguments"));
   if (!info[0].IsBuffer())
     throw(Napi::Error::New(env, "Invalid message specified"));
@@ -23,9 +24,12 @@ Napi::Buffer<unsigned char> Encrypt(const Napi::CallbackInfo &info) {
   if (!info[2].IsString())
     throw(Napi::Error::New(env, "Invalid cipher specified"));
 
-  return (encrypt(env, info[0].As<Napi::Buffer<unsigned char>>(),
-                  info[1].As<Napi::Buffer<unsigned char>>(),
-                  info[2].As<Napi::String>()));
+  return (encrypt(
+      env, info[0].As<Napi::Buffer<unsigned char>>(),
+      info[1].As<Napi::Buffer<unsigned char>>(), info[2].As<Napi::String>(),
+      info.Length() > 3 && info[3].IsObject()
+          ? std::make_optional<Napi::Object>(info[3].As<Napi::Object>())
+          : std::nullopt));
 }
 
 Napi::Buffer<unsigned char> Decrypt(const Napi::CallbackInfo &info) {

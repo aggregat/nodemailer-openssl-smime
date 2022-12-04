@@ -1,6 +1,8 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#include <optional>
+
 #include <napi.h>
 
 #define OPENSSL_API_COMPAT 30000
