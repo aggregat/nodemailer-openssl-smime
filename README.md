@@ -1,9 +1,27 @@
-# OpenSSL S/MIME Encryption and Decryption for Node.js and Nodemailer
+# Nodemailer S/MIME Encryption via OpenSSL
 
-## Quick Start
+## Installation
 
 ```sh
-$ npm ci
-$ npm run build
-$ npm test
+npm i nodemailer-openssl-smime --save
+```
+
+## Usage
+
+```typescript
+import { createTransport } from "nodemailer";
+import smime from "nodemailer-openssl-smime";
+
+const sendEncryptedEmail = async () => {
+  const transport = createTransport({
+    /* ... */
+  }).use("stream", smime({ recipient: "-----BEGIN CERTIFICATE-----..." }));
+
+  await transport.sendMail({
+    from: "sender@example.com",
+    to: "recipient@example.com",
+    subject: "This is a test",
+    text: "Hello world",
+  });
+};
 ```
