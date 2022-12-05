@@ -55,6 +55,8 @@ export const plugin = <T>({ recipient, cipher }: PluginOptions) => {
             // Concat arrays to comma-separated strings
             Array.prototype.concat.call([], value).join(", "),
           ])
+          // Remove empty strings
+          .filter(([, value]) => value.length > 0)
       );
 
       const encrypted = encrypt(
