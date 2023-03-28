@@ -1,7 +1,7 @@
 {
   "name": "nodemailer-openssl-smime",
   "description": "Nodemailer S/MIME encryption via OpenSSL",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "author": "Christof Brungräber <home@aggregat.biz>",
   "repository": {
     "type": "git",
